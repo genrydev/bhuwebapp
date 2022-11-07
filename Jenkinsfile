@@ -28,7 +28,7 @@ pipeline {
             steps {
                 //echo "${env.WORKSPACE}"
                 echo "${env.GIT_HASH}"
-                zip zipFile: "webapp-${env.GIT_HASH}.zip", archive: false, dir: "bin/app.publish"
+                zip zipFile: "webapp-${env.GIT_HASH}.zip", archive: false, dir: "bhuwebapp/bin/app.publish"
                 nexusArtifactUploader (
                     nexusVersion: 'nexus3',
                     protocol: 'http',
