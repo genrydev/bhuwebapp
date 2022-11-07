@@ -25,13 +25,18 @@ pipeline {
                     def sqScannerMsBuildHome = tool 'SonarMSBuild'
                     withSonarQubeEnv('sonarqube') {
                         powershell "${sqScannerMsBuildHome} begin /k:bhuwebapp"
-                        //bat 'MSBuild.exe /t:Rebuild'
+                        bat 'MSBuild.exe /t:Rebuild'
                         powershell "${sqScannerMsBuildHome} end"
                         //bat "${sqScannerMsBuildHome}\\SonarQube.Scanner.MSBuild.exe begin /k:bhuwebapp"
                         //bat 'MSBuild.exe /t:Rebuild'
                         //bat "${sqScannerMsBuildHome}\\SonarQube.Scanner.MSBuild.exe end"
                     }
                 }
+            }
+        }
+        stage('Build Artifact for Upload') {
+            steps {
+                powershell 'msbuild /verbosity:quiet /p:Configuration=Release /p:DeployOnBuild=true /p:PublishProfile=./FolderProfile.pubxml'
             }
         }
         stage ('Upload Artifact'){
