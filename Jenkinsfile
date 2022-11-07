@@ -48,14 +48,14 @@ pipeline {
                     nexusVersion: 'nexus3',
                     protocol: 'http',
                     nexusUrl: 'supervm.eastus.cloudapp.azure.com:8081',
-                    groupId: 'bhu.webapps',
+                    groupId: 'bhu.webapps.bhu-main-web-app',
                     version: 'snapshot',
                     repository: 'files',
                     credentialsId: 'nexus-admin',
                     artifacts: [
-                        [artifactId: "bhu-main-web-app",
+                        [artifactId: "webapp-${BUILD_NUMBER}-${env.GIT_HASH}.zip",
                         type: 'zip',
-                        classifier: 'snapshot',
+                        classifier: '1.0.0',
                         file: "webapp-${BUILD_NUMBER}-${env.GIT_HASH}.zip"]
                     ]
                 )
