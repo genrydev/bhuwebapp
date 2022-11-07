@@ -22,7 +22,7 @@ pipeline {
         stage ('Code Quality') {
             steps {
                 script {
-                    def sqScannerMsBuildHome = tool 'Scanner for MSBuild 4.6'
+                    def sqScannerMsBuildHome = tool 'SonarMSBuild'
                     withSonarQubeEnv('sonarqube') {
                         bat "${sqScannerMsBuildHome}\\SonarQube.Scanner.MSBuild.exe begin /k:bhuwebapp"
                         bat 'MSBuild.exe /t:Rebuild'
