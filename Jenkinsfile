@@ -18,10 +18,15 @@ pipeline {
             steps {
                 powershell 'vstest.console ./bhuwebapp.Tests/bin/Release/bhuwebapp.Tests.dll /Settings:./test.runsettings'
             }
-        }        
+        }
         stage ('Code Quality') {
             steps {
-                echo 'Code Quality'
+                def sqScannerMsBuildHome = tool 'Scanner for MSBuild 4.6'
+                withSonarQubeEnv('sonarqube') {
+                    bat "${sqScannerMsBuildHome}\\SonarQube.Scanner.MSBuild.exe begin /k:bhuwebapp"
+                    bat 'MSBuild.exe /t:Rebuild'
+                    bat "${sqScannerMsBuildHome}\\SonarQube.Scanner.MSBuild.exe end"
+                }
             }
         }
         stage ('Upload Artifact'){
