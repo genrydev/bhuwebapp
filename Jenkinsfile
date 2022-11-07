@@ -42,21 +42,21 @@ pipeline {
         stage ('Upload Artifact'){
             steps {
                 //echo "${env.WORKSPACE}"
-                echo "${env.GIT_HASH}"
-                zip zipFile: "webapp-${env.GIT_HASH}.zip", archive: false, dir: "bhuwebapp/bin/app.publish"
+                //echo "${env.GIT_HASH}"
+                zip zipFile: "webapp-${BUILD_NUMBER}-${env.GIT_HASH}.zip", archive: false, dir: "bhuwebapp/bin/app.publish"
                 nexusArtifactUploader (
                     nexusVersion: 'nexus3',
                     protocol: 'http',
                     nexusUrl: 'supervm.eastus.cloudapp.azure.com:8081',
                     groupId: 'bhu.webapps',
-                    version: '1.0.0',
+                    version: 'snapshot',
                     repository: 'files',
                     credentialsId: 'nexus-admin',
                     artifacts: [
-                        [artifactId: "web-app-1-${env.GIT_HASH}",
+                        [artifactId: "bhu-main-web-app",
                         type: 'zip',
                         classifier: 'snapshot',
-                        file: "webapp-${env.GIT_HASH}.zip"]
+                        file: "webapp-${BUILD_NUMBER}-${env.GIT_HASH}.zip"]
                     ]
                 )
             }
