@@ -7,6 +7,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bhuwebapp", "bhuwebapp\bhuw
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bhuwebapp.Tests", "bhuwebapp.Tests\bhuwebapp.Tests.csproj", "{5659AAD1-1642-4A49-96A5-D60754B23BE8}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{EC90537B-F1A9-4244-89E0-6127C8AB48A7}"
+	ProjectSection(SolutionItems) = preProject
+		test.runsettings = test.runsettings
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
