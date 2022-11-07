@@ -9,16 +9,16 @@ pipeline {
                 powershell 'nuget restore'
             }
         }
-        stage ('Unit Test') {
-            steps {
-                powershell 'vstest.console ./bhuwebapp.Tests/bin/Release/bhuwebapp.Tests.dll /Settings:./test.runsettings'
-            }
-        }
         stage('Build') {
             steps {
                 powershell 'msbuild /verbosity:quiet /p:Configuration=Release /p:DeployOnBuild=true /p:PublishProfile=./FolderProfile.pubxml'
             }
         }
+        stage ('Unit Test') {
+            steps {
+                powershell 'vstest.console ./bhuwebapp.Tests/bin/Release/bhuwebapp.Tests.dll /Settings:./test.runsettings'
+            }
+        }        
         stage ('Code Quality') {
             steps {
                 echo 'Code Quality'
