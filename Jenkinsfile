@@ -24,9 +24,12 @@ pipeline {
                 script {
                     def sqScannerMsBuildHome = tool 'SonarMSBuild'
                     withSonarQubeEnv('sonarqube') {
-                        bat "${sqScannerMsBuildHome}\\SonarQube.Scanner.MSBuild.exe begin /k:bhuwebapp"
+                        powershell "${sqScannerMsBuildHome}\\SonarScanner.MSBuild.exe begin /k:bhuwebapp"
                         bat 'MSBuild.exe /t:Rebuild'
-                        bat "${sqScannerMsBuildHome}\\SonarQube.Scanner.MSBuild.exe end"
+                        powershell "${sqScannerMsBuildHome}\\SonarScanner.MSBuild.exe end"
+                        //bat "${sqScannerMsBuildHome}\\SonarQube.Scanner.MSBuild.exe begin /k:bhuwebapp"
+                        //bat 'MSBuild.exe /t:Rebuild'
+                        //bat "${sqScannerMsBuildHome}\\SonarQube.Scanner.MSBuild.exe end"
                     }
                 }
             }
