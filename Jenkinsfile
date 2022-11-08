@@ -69,6 +69,10 @@ pipeline {
         }
         stage('Deploy To Dev') {
             agent { label "windows" }
+            environment {
+                GIT_HASH = GIT_COMMIT.take(8)
+                ARTIFACT_FILENAME = "webapp-${BUILD_NUMBER}-${env.GIT_HASH}.zip"
+            }
             stages {
                 stage ('Deploy To IIS Dev') {
                     steps {
