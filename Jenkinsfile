@@ -20,7 +20,7 @@ pipeline {
                 }
                 stage ('Unit Test') {
                     steps {
-                        echo 'Unit Test'
+                        powershell 'vstest.console ./bhuwebapp.Tests/bin/Release/bhuwebapp.Tests.dll /Settings:./test.runsettings'
                     }
                 }
                 stage ('Code Quality') {
