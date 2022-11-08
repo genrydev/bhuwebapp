@@ -13,34 +13,24 @@ pipeline {
                         powershell 'nuget restore'
                     }
                 }
-                // stage('Build') {
-                //     steps {
-                //         powershell 'msbuild /verbosity:quiet /p:Configuration=Release /p:DeployOnBuild=true /p:PublishProfile=./FolderProfile.pubxml'
-                //     }
-                // }
-                // stage ('Unit Test') {
-                //     steps {
-                //         powershell 'vstest.console ./bhuwebapp.Tests/bin/Release/bhuwebapp.Tests.dll /Settings:./test.runsettings'
-                //     }
-                // }
-                // stage ('Code Quality') {
-                //     steps {
-                //         script {
-                //             def sqScannerMsBuildHome = tool 'SonarMSBuild'
-                //             withSonarQubeEnv('sonarqube') {
-                //                 powershell "${sqScannerMsBuildHome} begin /k:bhuwebapp"
-                //                 bat 'MSBuild.exe /t:Rebuild'
-                //                 powershell "${sqScannerMsBuildHome} end"
-                //                 //bat "${sqScannerMsBuildHome}\\SonarQube.Scanner.MSBuild.exe begin /k:bhuwebapp"
-                //                 //bat 'MSBuild.exe /t:Rebuild'
-                //                 //bat "${sqScannerMsBuildHome}\\SonarQube.Scanner.MSBuild.exe end"
-                //             }
-                //         }
-                //     }
-                // }
-                stage('Build Artifact for Upload') {
+                stage('Build') {
                     steps {
                         powershell 'msbuild /verbosity:quiet /p:Configuration=Release /p:DeployOnBuild=true /p:PublishProfile=./FolderProfile.pubxml'
+                    }
+                }
+                stage ('Unit Test') {
+                    steps {
+                        echo 'Unit Test'
+                    }
+                }
+                stage ('Code Quality') {
+                    steps {
+                        echo 'Code Quality'
+                    }
+                }
+                stage('Build Artifact for Upload') {
+                    steps {
+                        echo 'Build Artifact for Upload'
                     }
                 }
                 stage ('Upload Artifact'){
@@ -67,37 +57,6 @@ pipeline {
                 }
             }
         }
-        stage('Deploy To Dev') {
-            agent { label "linux" }
-            environment {
-                GIT_HASH = GIT_COMMIT.take(8)
-                ARTIFACT_FILENAME = "webapp-${BUILD_NUMBER}-${env.GIT_HASH}.zip"
-            }
-            stages {
-                stage ('Deploy To IIS Dev') {
-                    steps {
-                        script {
-                            ansiblePlaybook (
-                                playbook: 'deploy.yml',
-                                inventory: 'inventory.yml',
-                                colorized: true,
-                                extras: "-vvvv -e artifact_filename=${ARTIFACT_FILENAME}"
-                            )
-                        }
-                    }
-                }
-            }
-        }
-        // stage ('Deploy Notification') {
-        //     steps {
-        //         echo 'Deploy Notification'
-        //     }
-        // }
-        // stage ('Site Speed Test') {
-        //     steps {
-        //         echo 'Site Speed Test'
-        //     }
-        // }
     }
     // post {
     //     always {
