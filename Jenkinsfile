@@ -40,7 +40,7 @@ pipeline {
                 }
                 stage('Build Artifact for Upload') {
                     steps {
-                        echo 'Build Artifact for Upload'
+                        powershell 'msbuild /verbosity:quiet /p:Configuration=Release /p:DeployOnBuild=true /p:PublishProfile=./FolderProfile.pubxml'
                     }
                 }
                 stage ('Upload Artifact'){
