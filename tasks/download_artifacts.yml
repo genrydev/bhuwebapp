@@ -1,0 +1,10 @@
+---
+- name: Create folder to download
+  win_file:
+    path: C:\ansible
+    state: directory
+
+- name: Download artifact
+  win_get_url:
+    url: "http://supervm.eastus.cloudapp.azure.com:8081/repository/files/bhu/webapps/bhu-main-web-app/webapp-28-6921bc38.zip/snapshot/webapp-28-6921bc38.zip-snapshot-1.0.0.zip"
+    dest: C:\ansible\{{ artifact_filename }}

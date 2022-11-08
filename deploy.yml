@@ -1,0 +1,5 @@
+---
+- name: Deploy site on IIS
+  hosts: iis1
+  tasks:
+    - import_tasks: tasks/download_artifacts.yml

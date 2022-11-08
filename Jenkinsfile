@@ -2,6 +2,7 @@ pipeline {
     agent { label "windows" }
     environment {
         GIT_HASH = GIT_COMMIT.take(8)
+        ARTIFACT_FILENAME = "webapp-${BUILD_NUMBER}-${env.GIT_HASH}.zip"
     }
     stages {
         stage('Descargar dependencias') {
@@ -43,7 +44,7 @@ pipeline {
             steps {
                 //echo "${env.WORKSPACE}"
                 //echo "${env.GIT_HASH}"
-                zip zipFile: "webapp-${BUILD_NUMBER}-${env.GIT_HASH}.zip", archive: false, dir: "bhuwebapp/bin/app.publish"
+                zip zipFile: "${ARTIFACT_FILENAME}", archive: false, dir: "bhuwebapp/bin/app.publish"
                 nexusArtifactUploader (
                     nexusVersion: 'nexus3',
                     protocol: 'http',
@@ -53,17 +54,24 @@ pipeline {
                     repository: 'files',
                     credentialsId: 'nexus-admin',
                     artifacts: [
-                        [artifactId: "webapp-${BUILD_NUMBER}-${env.GIT_HASH}.zip",
+                        [artifactId: "${ARTIFACT_FILENAME}",
                         type: 'zip',
                         classifier: '1.0.0',
-                        file: "webapp-${BUILD_NUMBER}-${env.GIT_HASH}.zip"]
+                        file: "${ARTIFACT_FILENAME}"]
                     ]
                 )
             }
         }
         stage ('Deploy To IIS Dev') {
             steps {
-                echo 'Deploy To IIS Dev'
+                script {
+                    ansiblePlaybook (
+                        playbook: 'deploy.yml',
+                        inventory: 'inventory.yml',
+                        colorized: true,
+                        extras: "-vvvv -e artifact_filename=${ARTIFACT_FILENAME}"
+                    )
+                }
             }
         }
         stage ('Deploy Notification') {
