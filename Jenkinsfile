@@ -1,12 +1,12 @@
 pipeline {
-    agent none
-    environment {
-        GIT_HASH = GIT_COMMIT.take(8)
-        ARTIFACT_FILENAME = "webapp-${BUILD_NUMBER}-${env.GIT_HASH}.zip"
-    }
+    agent none    
     stages {
         stage('Build, Test, Code Quality & Upload Artifact') {
             agent { label "windows" }
+            environment {
+                GIT_HASH = GIT_COMMIT.take(8)
+                ARTIFACT_FILENAME = "webapp-${BUILD_NUMBER}-${env.GIT_HASH}.zip"
+            }
             stages {
                 stage('Descargar dependencias') {
                     steps {
