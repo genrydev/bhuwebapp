@@ -67,6 +67,27 @@ pipeline {
                 }
             }
         }
+        stage('Deploy To Dev') {
+            agent { label "linux" }
+            environment {
+                GIT_HASH = GIT_COMMIT.take(8)
+                ARTIFACT_FILENAME = "webapp-${BUILD_NUMBER}-${env.GIT_HASH}.zip"
+            }
+            stages {
+                stage ('Deploy To IIS Dev') {
+                    steps {
+                        script {
+                            ansiblePlaybook (
+                                playbook: 'deploy.yml',
+                                inventory: 'inventory.yml',
+                                colorized: true,
+                                extras: "-vvvv -e artifact_filename=${ARTIFACT_FILENAME}"
+                            )
+                        }
+                    }
+                }
+            }
+        }
     }
     // post {
     //     always {

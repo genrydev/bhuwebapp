@@ -14,7 +14,7 @@
     path: 'C:\ansible\{{ artifact_filename }}'  
   register: stat_zip
 
-- name: Create folder to download
+- name: Create folder to unzip
   win_file:
     path: C:\ansible\webapp
     state: absent  
