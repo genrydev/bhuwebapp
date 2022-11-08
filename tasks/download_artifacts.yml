@@ -6,5 +6,22 @@
 
 - name: Download artifact
   win_get_url:
-    url: "http://supervm.eastus.cloudapp.azure.com:8081/repository/files/bhu/webapps/bhu-main-web-app/webapp-28-6921bc38.zip/snapshot/webapp-28-6921bc38.zip-snapshot-1.0.0.zip"
+    url: "http://supervm.eastus.cloudapp.azure.com:8081/repository/files/bhu/webapps/bhu-main-web-app/{{ artifact_filename }}/snapshot/{{ artifact_filename }}-snapshot-1.0.0.zip"
     dest: C:\ansible\{{ artifact_filename }}
+
+- name: Check if the package was downloaded
+  win_stat: 
+    path: 'C:\ansible\{{ artifact_filename }}'  
+  register: stat_zip
+
+- name: Unzip package
+  win_unzip:
+    src: C:\ansible\{{ artifact_filename }}
+    dest: C:\ansible\webapp
+  when: stat_zip.stat.exists == True
+  
+- name: Remove download package
+  win_file:
+    path: C:\ansible\{{ artifact_filename }}
+    state: absent
+  when: stat_zip.stat.exists == True
